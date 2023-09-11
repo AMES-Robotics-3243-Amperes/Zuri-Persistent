@@ -24,12 +24,13 @@ public class CommandDriveTrainManual extends CommandBase {
   public CommandDriveTrainManual(XboxController controller, SubsystemDriveTrain subsystem) {
     m_controller = controller;
     m_subsystem = subsystem;
+    addRequirements(subsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setCartesianVelocityRaw(m_controller.getLeftX(), m_controller.getLeftY(), m_controller.getRightX());
+    m_subsystem.setCartesianVelocityRaw(m_controller.getLeftX()/10., m_controller.getLeftY()/10., m_controller.getRightX()/10.);
   }
 
   // Called once the command ends or is interrupted.

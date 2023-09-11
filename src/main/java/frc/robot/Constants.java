@@ -11,10 +11,10 @@ public final class Constants {
 
     public static final class DriveTrain {
         public static final class MotorIDs {
-            public static final int frontLeft = 2;
-            public static final int frontRight = 3;
-            public static final int rearLeft = 4;
-            public static final int rearRight = 5;
+            public static final int frontLeft = 4;
+            public static final int frontRight = 5;
+            public static final int rearLeft = 3;
+            public static final int rearRight = 2;
 
         }
 
