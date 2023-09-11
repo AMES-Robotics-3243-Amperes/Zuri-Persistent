@@ -28,6 +28,8 @@ public class SubsystemDriveTrain extends SubsystemBase {
   SparkMaxPIDController PIDRearLeft;
   SparkMaxPIDController PIDRearRight;
 
+  /** An object which is used to convert robot translation and rotation values into 
+   * Mecanum drive wheel speeds. Uses the positions of each wheel to do this H! */
   MecanumDriveKinematics kinematics;
 
 
@@ -42,6 +44,11 @@ public class SubsystemDriveTrain extends SubsystemBase {
     PIDFrontRight = motorFrontRight.getPIDController();
     PIDRearLeft = motorRearLeft.getPIDController();
     PIDRearRight = motorRearRight.getPIDController();
+
+    setPIDFValues(PIDFrontLeft, PIDValues.p, PIDValues.i, PIDValues.d, PIDValues.ff);
+    setPIDFValues(PIDFrontRight, PIDValues.p, PIDValues.i, PIDValues.d, PIDValues.ff);
+    setPIDFValues(PIDRearLeft, PIDValues.p, PIDValues.i, PIDValues.d, PIDValues.ff);
+    setPIDFValues(PIDRearRight, PIDValues.p, PIDValues.i, PIDValues.d, PIDValues.ff);
 
     kinematics = new MecanumDriveKinematics(
       PhysicalDimensions.wheelPosFrontLeft, 
@@ -66,6 +73,18 @@ public class SubsystemDriveTrain extends SubsystemBase {
     PIDRearLeft.setReference(speedRearLeft, ControlType.kVelocity);
     PIDRearRight.setReference(speedRearRight, ControlType.kVelocity);
   }
+
+
+  /**Sets the PID targets for each wheel to the given values
+   * 
+   * @param speeds The {@link MecanumDriveWheelSpeeds} object containing all the speeds for each wheel
+   * 
+   * H!
+   */
+  protected void setMotorSpeedsTarget(MecanumDriveWheelSpeeds speeds) {
+    setMotorSpeedsTarget(speeds.frontLeftMetersPerSecond, speeds.frontRightMetersPerSecond, speeds.rearLeftMetersPerSecond, speeds.rearRightMetersPerSecond);
+  }
+
 
   /**Sets the raw speed values for each wheel to the given values
    * @deprecated Using direct motor percents is unideal. Use {@link #setMotorSpeedsTarget(double, double, double, double)} instead
@@ -96,7 +115,9 @@ public class SubsystemDriveTrain extends SubsystemBase {
   }
 
   public void setCartesianVelocityTarget(double x, double y, double omega) {
-    // TODO
+    MecanumDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(x, y, omega));
+
+    setMotorSpeedsTarget(wheelSpeeds);
   }
 
   /**Sets the velocity of the drive train in x, y, and theta, using raw percent speeds
@@ -117,5 +138,22 @@ public class SubsystemDriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  /**
+   * Sets the PIDF values of a motor controller.
+   * @param PIDController The PID controller that is having its values modified 
+   * @param p The new P value
+   * @param i The new I value
+   * @param d The new D value
+   * @param ff The new FF (feed forward) value
+   * 
+   * H!
+   */
+  public static void setPIDFValues(SparkMaxPIDController PIDController, double p, double i, double d, double ff) {
+    PIDController.setP(p);
+    PIDController.setI(i);
+    PIDController.setD(d);
+    PIDController.setFF(ff);
   }
 }

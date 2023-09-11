@@ -10,19 +10,30 @@ import edu.wpi.first.math.geometry.Translation2d;
 public final class Constants {
 
     public static final class DriveTrain {
+
+
         public static final class MotorIDs {
             public static final int frontLeft = 4;
             public static final int frontRight = 5;
             public static final int rearLeft = 3;
             public static final int rearRight = 2;
-
         }
+
 
         public static final class PhysicalDimensions {
             public static final Translation2d wheelPosFrontLeft = new Translation2d(-0.75, 1.25);
             public static final Translation2d wheelPosFrontRight = new Translation2d(0.75, 1.25);
             public static final Translation2d wheelPosRearLeft = new Translation2d(-0.75, -1.25);
             public static final Translation2d wheelPosRearRight = new Translation2d(0.75, -1.25);
+        }
+
+
+        public static final class PIDValues {
+            // TODO these values are guesses and need to be tuned still
+            public static final double p = 0.1;
+            public static final double i = 0.5;
+            public static final double d = 0.5;
+            public static final double ff = 1;
         }
     }
 
