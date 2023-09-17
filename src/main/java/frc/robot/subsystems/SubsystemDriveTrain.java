@@ -40,6 +40,8 @@ public class SubsystemDriveTrain extends SubsystemBase {
     motorRearLeft = new CANSparkMax(MotorIDs.rearLeft, MotorType.kBrushless);
     motorRearRight = new CANSparkMax(MotorIDs.rearRight, MotorType.kBrushless);
 
+    motorFrontRight.setInverted(true);
+
     PIDFrontLeft = motorFrontLeft.getPIDController();
     PIDFrontRight = motorFrontRight.getPIDController();
     PIDRearLeft = motorRearLeft.getPIDController();
